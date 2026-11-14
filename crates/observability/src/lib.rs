@@ -46,7 +46,7 @@ mod tests {
 
     #[test]
     fn malformed_filter_returns_an_error() {
-        let result = init("this is not a valid filter directive !!!");
+        let result = init("ese=not_a_level");
         assert!(matches!(result, Err(ObservabilityError::InvalidFilter(_))));
     }
 }
