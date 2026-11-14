@@ -61,3 +61,8 @@ jobs:
 
       - name: Audit dependencies
         uses: EmbarkStudios/cargo-deny-action@v2
+
+      - name: Verify declared MSRV
+        run: |
+          rustup toolchain install 1.85.0 --profile minimal
+          cargo +1.85.0 check --workspace --all-targets --locked
