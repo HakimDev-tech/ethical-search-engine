@@ -54,12 +54,12 @@ fn validate_opaque_identifier(value: &str) -> Result<(), DomainValidationError> 
         });
     }
 
-    if value.chars().any(char::is_whitespace) {
-        return Err(DomainValidationError::WhitespaceNotAllowed);
-    }
-
     if value.chars().any(char::is_control) {
         return Err(DomainValidationError::ControlCharacterNotAllowed);
+    }
+
+    if value.chars().any(char::is_whitespace) {
+        return Err(DomainValidationError::WhitespaceNotAllowed);
     }
 
     Ok(())
@@ -251,7 +251,7 @@ mod tests {
     fn identifiers_reject_control_characters_and_excessive_length() {
         assert_eq!(
             DocumentId::new("source\n42").unwrap_err(),
-            DomainValidationError::WhitespaceNotAllowed
+            DomainValidationError::ControlCharacterNotAllowed
         );
         assert_eq!(
             SourceId::new("x".repeat(MAX_IDENTIFIER_CHARS + 1)).unwrap_err(),
