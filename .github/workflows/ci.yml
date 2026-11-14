@@ -46,3 +46,7 @@ jobs:
 
       - name: Build documentation
         run: cargo doc --workspace --no-deps
+
+      - name: Emit resolved lockfile for repository bootstrap
+        if: github.ref == 'refs/heads/v0.1/implementation' && github.event_name == 'push'
+        run: cat Cargo.lock
