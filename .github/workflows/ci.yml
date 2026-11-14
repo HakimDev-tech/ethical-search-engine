@@ -38,6 +38,12 @@ jobs:
       - name: Validate workspace metadata
         run: cargo metadata --no-deps --format-version 1
 
+      - name: Enforce dependency boundaries
+        shell: bash
+        run: |
+          test "$(cargo tree -p ese-domain --edges normal | wc -l)" -eq 1
+          test "$(cargo tree -p ese-config --edges normal | wc -l)" -eq 1
+
       - name: Check workspace
         run: cargo check --workspace --all-targets --locked
 
