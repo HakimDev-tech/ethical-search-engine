@@ -52,3 +52,6 @@ jobs:
 
       - name: Build documentation
         run: cargo doc --workspace --no-deps --locked
+
+      - name: Audit dependencies
+        uses: EmbarkStudios/cargo-deny-action@v2
