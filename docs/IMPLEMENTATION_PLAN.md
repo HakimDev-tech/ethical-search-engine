@@ -161,7 +161,7 @@ cargo doc --workspace --no-deps
 cargo deny check
 ```
 
-The CI workflow runs the required Rust commands with the pinned toolchain and performs a `cargo-deny` audit using the committed `deny.toml`. The dependency audit denies known vulnerabilities, yanked crates, unapproved licenses and unknown dependency sources; unmaintained crates and duplicate versions are warnings requiring review.
+The CI workflow runs the required Rust commands with the pinned toolchain and performs a `cargo-deny` audit using the committed `deny.toml`. The dependency audit denies known vulnerability and unsoundness advisories, unmaintained crates, yanked crates, unapproved licenses and unknown dependency sources. Duplicate versions are warnings requiring review.
 
 ## 7. Implementation sequence
 
