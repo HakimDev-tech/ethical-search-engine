@@ -63,9 +63,6 @@ ethical-search-engine/
 │   ├── domain/
 │   ├── config/
 │   └── observability/
-├── tests/
-│   ├── integration/
-│   └── fixtures/
 └── .github/
     └── workflows/
         └── ci.yml
@@ -134,12 +131,7 @@ Avoid speculative fields and premature domain entities. Add a type only when its
 
 ## 6. Configuration model
 
-Configuration precedence:
-1. Explicit environment variables.
-2. Configuration file, if one is introduced.
-3. Documented defaults.
-
-All configuration must be validated at startup. Invalid configuration must fail clearly and early.
+V0.1 reads explicit `ESE_`-prefixed environment variables and then applies documented defaults. Configuration files are deferred and are not part of the V0.1 precedence chain. All loaded configuration must be validated before application startup proceeds. Invalid configuration must fail clearly and early.
 
 Secrets must:
 - Never be committed.
