@@ -56,7 +56,8 @@ ethical-search-engine/
 │   ├── PRODUCT_SPEC.md
 │   ├── ARCHITECTURE.md
 │   ├── TECHNICAL_DECISIONS.md
-│   └── ACCEPTANCE_CRITERIA.md
+│   ├── ACCEPTANCE_CRITERIA.md
+│   └── IMPLEMENTATION_PLAN.md
 ├── apps/
 │   └── (future executable applications)
 ├── crates/
