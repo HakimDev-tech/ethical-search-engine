@@ -1,0 +1,12 @@
+[package]
+name = "ese-config"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+description = "Typed environment configuration for Ethical Search Engine"
+
+[dependencies]
+
+[lints]
+workspace = true

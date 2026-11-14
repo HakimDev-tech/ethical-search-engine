@@ -152,13 +152,16 @@ The following commands must succeed from the repository root:
 
 ```bash
 cargo fmt --all -- --check
+cargo metadata --no-deps --format-version 1
 cargo check --workspace --all-targets
+cargo build --workspace
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace --all-targets
 cargo doc --workspace --no-deps
+cargo deny check
 ```
 
-The CI workflow must run the same commands using the pinned toolchain. Dependency security scanning may be added if the selected action/tool is maintained and its failure semantics are documented; it must not replace review of advisories and licenses.
+The CI workflow runs the required Rust commands with the pinned toolchain, verifies compilation on the declared Rust 1.85.0 MSRV, and performs a `cargo-deny` audit using the committed `deny.toml`. The dependency audit denies known vulnerability and unsoundness advisories, unmaintained crates, yanked crates, unapproved licenses and unknown dependency sources. Duplicate versions are warnings requiring review.
 
 ## 7. Implementation sequence
 
@@ -202,7 +205,8 @@ Exit gate: initialization contract is documented and no sensitive values are emi
 
 ### Step 5 — CI and repository quality
 - Add GitHub Actions workflow.
-- Run formatting, check, Clippy, tests and docs.
+- Run formatting, metadata, check, build, Clippy, tests and docs.
+- Run the cargo-deny license and advisory audit.
 - Verify the workflow on the V0.1 branch.
 - Review dependency tree, licenses and advisories.
 

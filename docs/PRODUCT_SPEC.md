@@ -115,7 +115,7 @@ In scope:
 - Minimal, compiling crate structure.
 - Shared domain primitives and invariants.
 - Configuration loading and validation.
-- Shared error conventions.
+- Crate-owned typed errors and safe diagnostic boundaries.
 - Structured logging initialization.
 - Dependency and module-boundary rules.
 - Unit and integration test foundations.
