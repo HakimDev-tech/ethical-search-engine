@@ -39,7 +39,9 @@ Install the pinned Rust toolchain with rustup, then run these commands from the 
 
 ```bash
 cargo fmt --all -- --check
+cargo metadata --no-deps --format-version 1
 cargo check --workspace --all-targets --locked
+cargo build --workspace --locked
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --all-targets --locked
 cargo doc --workspace --no-deps --locked
