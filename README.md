@@ -2,15 +2,22 @@
 
 An independent, privacy-conscious, multilingual web search engine focused on relevance, source credibility, information quality and transparent ethical content policies.
 
-**Current baseline:** V0.1 — specification and engineering foundation  
+**Current baseline:** V0.1 — engineering foundation in implementation  
 **Product languages:** Arabic, French and English  
 **Primary implementation language:** Rust
 
 ## Project status
 
-The repository contains the V0.1 reference specifications and the concrete implementation plan. Rust implementation has not started.
+The V0.1 Rust workspace is implemented on the `v0.1/implementation` branch and is under review in [Pull Request #1](https://github.com/HakimDev-tech/ethical-search-engine/pull/1).
 
-The project is intentionally being developed through explicit specifications, architecture reviews, implementation, automated verification and release gates. A feature is not considered complete merely because it compiles.
+The initial foundation contains three library crates:
+- `ese-domain`: validated domain identifiers, language codes, ethical decisions and policy versions.
+- `ese-config`: typed configuration loaded from `ESE_*` environment variables.
+- `ese-observability`: structured tracing initialization.
+
+The workspace is pinned to Rust 1.100.0, uses Edition 2024, declares MSRV 1.85.0 and commits `Cargo.lock`. Automated CI checks formatting, compilation, Clippy, tests and documentation.
+
+A passing foundation build does not mean that the search engine itself is operational. No crawler, index, retrieval, ranking or ethical classification engine is implemented yet.
 
 ## Reference documentation
 
@@ -22,13 +29,23 @@ The project is intentionally being developed through explicit specifications, ar
 
 ## V0.1 scope
 
-V0.1 will establish the Cargo workspace, foundational domain types, configuration, shared error conventions, structured logging, tests, CI and reproducible developer setup.
+V0.1 establishes the Cargo workspace, foundational domain types, deterministic configuration, structured logging, tests, CI and reproducible developer setup.
 
-Crawler, indexing, search retrieval, ranking, content classification, API and frontend are future capabilities and are not implemented in this baseline.
+Crawler, indexing, search retrieval, ranking, content classification, API and frontend remain future capabilities.
 
 ## Development
 
-Implementation instructions will be added with the first code-bearing V0.1 commit.
+Install the pinned Rust toolchain with rustup, then run these commands from the repository root:
+
+```bash
+cargo fmt --all -- --check
+cargo check --workspace --all-targets --locked
+cargo clippy --workspace --all-targets --locked -- -D warnings
+cargo test --workspace --all-targets --locked
+cargo doc --workspace --no-deps --locked
+```
+
+The application log level is configured through `ESE_LOG_LEVEL`. Supported values are `error`, `warn`, `info`, `debug` and `trace`; the default is `info`.
 
 ## License
 
