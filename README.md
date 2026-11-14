@@ -30,6 +30,7 @@ V0.2 is being specified on `v0.2/specification`. No crawler implementation or ne
 - [Crawler technical decisions](docs/V0.2_CRAWLER_DECISIONS.md)
 - [Crawler acceptance criteria](docs/V0.2_CRAWLER_ACCEPTANCE.md)
 - [Crawler implementation plan](docs/V0.2_CRAWLER_IMPLEMENTATION_PLAN.md)
+- [Dependency and API preflight](docs/V0.2_DEPENDENCY_PREFLIGHT.md)
 
 ## V0.1 development
 
