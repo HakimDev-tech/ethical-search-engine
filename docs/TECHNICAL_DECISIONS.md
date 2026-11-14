@@ -276,3 +276,27 @@ To change an accepted decision:
 **Rationale:** Selecting a license without the owner's intent would be an unjustified legal and product decision.
 
 **Consequences:** The README must state that no license has been selected and that no reuse permission is implied.
+
+
+---
+
+# V0.2 crawler decisions — proposed
+
+The following decisions apply only to the V0.2 crawler scope and supplement the numbered ADRs above.
+
+See `V0.2_CRAWLER_DECISIONS.md` for full context, alternatives and consequences.
+
+- **ADR-V02-001:** one cohesive `ese-crawler` library crate; internal modules, no crawler service or binary.
+- **ADR-V02-002:** Tokio is introduced only in the crawler crate for asynchronous I/O and bounded concurrency.
+- **ADR-V02-003:** Reqwest with Rustls and streaming; no compression, cookies, ambient proxy or automatic redirects; HTTP/1.1 baseline.
+- **ADR-V02-004:** standards-based URL parsing through `url`; no ad hoc URL parsing.
+- **ADR-V02-005:** injectable DNS, IANA-derived public-address filtering and per-fetch connection pinning.
+- **ADR-V02-006:** no redirects are followed in V0.2.
+- **ADR-V02-007:** robots must be evaluated before page fetch; failures deny by conservative product policy except 404/410.
+- **ADR-V02-008:** bounded in-memory robots and politeness state; no persistence or distributed scheduler.
+- **ADR-V02-009:** HTML-only, identity-encoded, streamed responses with a 5 MiB page cap and 512 KiB robots cap.
+- **ADR-V02-010:** explicit seed URLs only; no recursive discovery or automatic retries.
+- **ADR-V02-011:** query strings, credentials, response bodies and arbitrary headers are redacted before tracing.
+- **ADR-V02-012:** every dependency, especially the robots parser, requires maintenance, license, MSRV, feature and security review.
+
+These decisions remain proposed until the V0.2 specification review is accepted. No V0.2 runtime dependency is added by this documentation change.
