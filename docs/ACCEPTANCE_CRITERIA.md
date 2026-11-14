@@ -1,0 +1,193 @@
+# Acceptance Criteria — Ethical Search Engine V0.1
+
+- Document ID: ESE-AC-001
+- Document version: 1.0
+- Target release: V0.1
+- Status: Baseline acceptance contract
+
+## 1. Acceptance rules
+
+V0.1 is accepted only when every mandatory criterion below passes.
+
+The existence of code, a successful local demonstration or an implementation agent's claim is not evidence of acceptance by itself. Results must be reproducible from the repository.
+
+Criterion status values:
+- PASS: verified with evidence.
+- FAIL: verified and not satisfied.
+- BLOCKED: cannot yet be evaluated because a prerequisite is missing.
+- NOT APPLICABLE: explicitly justified; must not be used to hide an incomplete mandatory requirement.
+
+No mandatory criterion may be silently waived.
+
+## 2. Workspace and toolchain
+
+### AC-001 — Cargo workspace
+- [ ] A root Cargo.toml defines a valid workspace.
+- [ ] Workspace members are explicit and contain real functionality.
+- [ ] Shared dependency versions are centralized where that reduces drift.
+- [ ] Cargo metadata succeeds.
+- [ ] No empty placeholder crates are included.
+
+### AC-002 — Reproducible toolchain
+- [ ] rust-toolchain.toml pins a documented stable toolchain or an explicitly justified channel.
+- [ ] Required components and targets are documented.
+- [ ] Toolchain installation is reproducible on a clean environment.
+- [ ] MSRV policy is documented; if no separate MSRV is declared, the pinned toolchain is the minimum supported baseline for V0.1.
+
+### AC-003 — Build
+- [ ] cargo check --workspace succeeds.
+- [ ] cargo build --workspace succeeds.
+- [ ] No unexplained compiler warnings remain.
+- [ ] The commands work from the repository root.
+
+## 3. Domain model
+
+### AC-004 — Identifiers and language values
+- [ ] DocumentId has a documented representation and validates invalid values.
+- [ ] SourceId has a documented representation and validates invalid values.
+- [ ] LanguageCode represents Arabic, French and English.
+- [ ] An unknown or undetermined language can be represented where required.
+- [ ] Unicode text is preserved without lossy conversion.
+- [ ] Domain types do not perform language detection or claim linguistic processing that is not implemented.
+
+### AC-005 — Policy outcome
+- [ ] EthicalDecision represents Allow, Review and Exclude.
+- [ ] Review is not treated as approved.
+- [ ] PolicyVersion is attributable to a specific revision.
+- [ ] Invalid states cannot be constructed through the supported public API.
+
+### AC-006 — Domain independence
+- [ ] Domain does not depend on Axum, Tantivy, PostgreSQL clients, Reqwest or AI runtimes.
+- [ ] Domain invariants are tested.
+- [ ] Public types have intentional visibility and documented behavior.
+
+## 4. Configuration
+
+### AC-007 — Configuration loading and validation
+- [ ] Configuration loads from the documented source.
+- [ ] Precedence is deterministic and documented.
+- [ ] Invalid values produce actionable errors.
+- [ ] Defaults are explicit and tested.
+- [ ] Configuration validation occurs before application startup proceeds.
+
+### AC-008 — Secret handling
+- [ ] No credentials or private tokens are committed.
+- [ ] Secrets are not included in debug output or error messages.
+- [ ] Secrets are not emitted in tracing events.
+- [ ] .gitignore excludes relevant local secret files where applicable.
+
+## 5. Errors and observability
+
+### AC-009 — Error conventions
+- [ ] Shared error categories are documented.
+- [ ] Validation errors can be distinguished from internal failures.
+- [ ] Diagnostic context is preserved.
+- [ ] Production paths do not use unexplained unwrap or expect.
+- [ ] Errors do not expose secrets.
+
+### AC-010 — Structured logging
+- [ ] Logging initializes successfully.
+- [ ] Log level is configurable.
+- [ ] Events use consistent structured fields.
+- [ ] Raw queries and sensitive personal data are not logged by default.
+- [ ] Startup failures can be diagnosed without exposing secrets.
+
+## 6. Architecture and maintainability
+
+### AC-011 — Dependency boundaries
+- [ ] Crate dependency direction follows ARCHITECTURE.md.
+- [ ] No circular crate dependency exists.
+- [ ] Domain remains infrastructure-independent.
+- [ ] Application composition is kept outside domain logic.
+- [ ] Forbidden dependencies are checked automatically where practical.
+
+### AC-012 — Scope discipline
+- [ ] No crawler is represented as functional.
+- [ ] No search index or BM25 capability is represented as functional.
+- [ ] No ERE ranking or policy classifier is represented as functional.
+- [ ] No production API or frontend is represented as functional.
+- [ ] No dependency is added solely for a future feature.
+
+### AC-013 — Code quality
+- [ ] Public APIs have clear contracts.
+- [ ] Unsafe Rust is not used unless a documented safety case and review exist.
+- [ ] No unexplained global mutable state exists.
+- [ ] No dead code or placeholder implementation is presented as completed functionality.
+- [ ] Comments explain non-obvious constraints rather than restating code.
+
+## 7. Testing
+
+### AC-014 — Unit tests
+- [ ] Domain validation tests pass.
+- [ ] Configuration tests pass.
+- [ ] Error behavior tests pass.
+- [ ] Serialization tests pass where serialization is implemented.
+- [ ] Important edge cases are covered.
+
+### AC-015 — Integration tests
+- [ ] Integration tests run from the workspace.
+- [ ] Tests are deterministic.
+- [ ] Tests do not require public network access.
+- [ ] Failure paths are tested.
+- [ ] Test fixtures are explicit and controlled.
+
+### AC-016 — Regression protection
+- [ ] Test commands are documented.
+- [ ] CI executes the same relevant test suites.
+- [ ] A failed test causes CI failure.
+
+## 8. Documentation
+
+### AC-017 — Reference documents
+- [ ] docs/PRODUCT_SPEC.md exists and matches the agreed product decisions.
+- [ ] docs/ARCHITECTURE.md matches the actual crate structure.
+- [ ] docs/TECHNICAL_DECISIONS.md records the selected and deferred technologies.
+- [ ] docs/ACCEPTANCE_CRITERIA.md contains verifiable release requirements.
+- [ ] README.md provides clean setup, build, test and lint instructions.
+- [ ] Documentation does not claim unimplemented capabilities.
+
+## 9. CI and dependency security
+
+### AC-018 — CI
+- [ ] Formatting validation runs.
+- [ ] Workspace compilation runs.
+- [ ] Clippy runs with the documented warning policy.
+- [ ] Tests run.
+- [ ] Documentation checks run.
+- [ ] CI reports failure when a required check fails.
+
+### AC-019 — Dependency review
+- [ ] Direct dependencies have documented purposes.
+- [ ] Dependency licenses are reviewed for compatibility.
+- [ ] Known security advisories are checked using an available tool.
+- [ ] Any unresolved advisory is recorded with severity and disposition.
+- [ ] Cargo.lock is committed.
+
+## 10. Release gate
+
+V0.1 may be marked ACCEPTED only when:
+1. All mandatory criteria pass.
+2. CI succeeds on the release commit.
+3. The architecture matches the implementation.
+4. Documentation matches the repository.
+5. No unresolved critical or high-severity security issue remains.
+6. The final review report is committed or attached to the release.
+7. The release commit is identifiable.
+
+## 11. Required validation report
+
+The release reviewer must record:
+- Commit SHA.
+- Rust toolchain version.
+- Host platform used for validation.
+- cargo fmt result.
+- cargo check result.
+- cargo build result.
+- cargo clippy result.
+- Unit and integration test results.
+- Documentation validation result.
+- Dependency/security review result.
+- Failed, blocked or waived criteria with justification.
+- Final decision: ACCEPTED or REJECTED.
+
+A rejected release must list corrective actions. The version must not be labelled complete until the release gate is satisfied.
