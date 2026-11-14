@@ -47,9 +47,6 @@ mod tests {
     #[test]
     fn malformed_filter_returns_an_error() {
         let result = init("this is not a valid filter directive !!!");
-        assert!(matches!(
-            result,
-            Err(ObservabilityError::InvalidFilter(_))
-        ));
+        assert!(matches!(result, Err(ObservabilityError::InvalidFilter(_))));
     }
 }
