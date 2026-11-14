@@ -1,4 +1,4 @@
-use ese_observability::{init, ObservabilityError};
+use ese_observability::{ObservabilityError, init};
 
 #[test]
 fn initialization_succeeds_once_and_duplicate_is_reported() {
