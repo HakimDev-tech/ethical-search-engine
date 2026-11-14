@@ -1,7 +1,7 @@
 # Acceptance Criteria — Ethical Search Engine V0.1
 
 - Document ID: ESE-AC-001
-- Document version: 1.0
+- Document version: 1.1
 - Target release: V0.1
 - Status: Baseline acceptance contract
 
@@ -191,3 +191,81 @@ The release reviewer must record:
 - Final decision: ACCEPTED or REJECTED.
 
 A rejected release must list corrective actions. The version must not be labelled complete until the release gate is satisfied.
+
+
+---
+
+## V0.1 implementation-specific acceptance supplement (version 1.1)
+
+The following criteria refine the generic requirements above and are mandatory. If a generic example conflicts with this supplement, this supplement governs V0.1.
+
+### AC-020 — Exact crate topology
+- [ ] Workspace contains exactly `ese-domain`, `ese-config` and `ese-observability`.
+- [ ] All three are real library crates with tested behavior.
+- [ ] No generic `errors` crate exists.
+- [ ] No empty placeholder crate exists.
+- [ ] No binary application is added without an approved use case.
+
+### AC-021 — Toolchain reproducibility
+- [ ] `rust-toolchain.toml` pins Rust 1.100.0.
+- [ ] Rust edition is 2024.
+- [ ] Workspace declares MSRV 1.85.0.
+- [ ] Cargo resolver is 3.
+- [ ] rustfmt and Clippy components are requested by the toolchain file.
+- [ ] CI runs the pinned toolchain, not an unpinned stable channel.
+
+### AC-022 — Minimal dependencies
+- [ ] `ese-domain` has no external dependencies.
+- [ ] `ese-config` has no external dependencies.
+- [ ] `ese-observability` uses only tracing and tracing-subscriber as direct runtime dependencies.
+- [ ] tracing-subscriber enables only the fmt and env-filter features unless a documented need is approved.
+- [ ] No future crawler, search, database, HTTP or AI dependency is introduced.
+
+### AC-023 — Domain invariants
+- [ ] DocumentId and SourceId reject empty and whitespace-only values.
+- [ ] Identifier length and allowed-character policy are documented and tested.
+- [ ] LanguageCode supports ar, fr, en and und.
+- [ ] Unicode values are preserved.
+- [ ] EthicalDecision has exactly the documented Allow, Review and Exclude outcomes.
+- [ ] PolicyVersion rejects invalid identifiers.
+- [ ] No domain type performs I/O or reads environment variables.
+
+### AC-024 — Configuration determinism
+- [ ] Environment variables use the ESE_ prefix.
+- [ ] Defaults are documented.
+- [ ] Malformed explicit values return errors instead of silently falling back.
+- [ ] Environment-dependent tests are isolated and do not depend on test execution order.
+- [ ] No secret is required or logged in V0.1.
+
+### AC-025 — Observability lifecycle
+- [ ] Subscriber initialization has a documented lifecycle.
+- [ ] Initialization failure is handled explicitly.
+- [ ] Duplicate initialization does not cause an unexplained panic.
+- [ ] Default log filtering is documented.
+- [ ] Raw user queries, secrets and personal data are not logged.
+
+### AC-026 — Workspace lint policy
+- [ ] Workspace forbids unsafe Rust.
+- [ ] Clippy is run for all workspace targets.
+- [ ] CI treats Clippy warnings as failures.
+- [ ] Formatting is checked rather than automatically rewritten in CI.
+
+### AC-027 — Required developer commands
+All commands must pass from the repository root:
+- [ ] `cargo fmt --all -- --check`
+- [ ] `cargo check --workspace --all-targets`
+- [ ] `cargo clippy --workspace --all-targets -- -D warnings`
+- [ ] `cargo test --workspace --all-targets`
+- [ ] `cargo doc --workspace --no-deps`
+
+### AC-028 — License transparency
+- [ ] No license is added without an explicit owner decision.
+- [ ] README clearly states that no license has been selected.
+- [ ] No documentation claims the repository is open source before a license is chosen.
+
+### AC-029 — CI parity
+- [ ] GitHub Actions uses Rust 1.100.0.
+- [ ] CI executes the same required commands listed in AC-027.
+- [ ] CI fails on any failed required command.
+- [ ] The workflow runs for pushes and pull requests targeting the default branch.
+
