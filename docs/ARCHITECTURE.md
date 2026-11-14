@@ -1,7 +1,7 @@
 # System Architecture — Ethical Search Engine
 
 - Document ID: ESE-ARCH-001
-- Document version: 1.0
+- Document version: 1.1
 - Target release: V0.1
 - Status: Baseline architecture
 
@@ -239,3 +239,50 @@ A change to a major dependency, crate boundary, data ownership rule or policy bo
 - Updated decision records and documentation.
 
 The architecture is a controlled baseline and may evolve when evidence justifies it.
+
+
+---
+
+## V0.1 implementation profile — normative clarification (version 1.1)
+
+This section makes the initial workspace concrete and supersedes any earlier generic crate-layout examples in this document.
+
+### Exact initial crates
+
+V0.1 contains exactly these three library crates:
+
+- `ese-domain` at `crates/domain`: identifiers, language values, ethical decision values, policy version and domain validation.
+- `ese-config` at `crates/config`: typed configuration, ESE_-prefixed environment parsing, defaults and validation.
+- `ese-observability` at `crates/observability`: tracing subscriber initialization and safe structured logging.
+
+There is no generic `errors` crate. Errors belong to the crate that owns the operation and its invariants. A future executable may introduce an application-level error aggregation strategy at its outer boundary.
+
+There is no binary application in V0.1. No empty placeholder crates or future-only directories are permitted.
+
+### Dependency graph
+
+- `ese-domain`: standard library only.
+- `ese-config`: standard library only.
+- `ese-observability`: `tracing` and `tracing-subscriber` with only the `fmt` and `env-filter` features.
+
+These crates are independent in V0.1. No crate may depend on another merely to share generic error or utility types.
+
+### Toolchain and workspace
+
+- Rust toolchain: 1.100.0, pinned in `rust-toolchain.toml`.
+- Edition: 2024.
+- Declared MSRV: 1.85.0.
+- Cargo resolver: 3.
+- `unsafe_code = "forbid"` across workspace code.
+- Cargo.lock is committed.
+- Formatting, check, Clippy, tests and documentation commands are required in CI.
+
+The toolchain pin is the V0.1 reproducibility baseline. The MSRV is a compatibility policy and must be revalidated against every accepted dependency update.
+
+### Configuration constraints
+
+V0.1 uses environment variables with the `ESE_` prefix and documented defaults. A configuration file parser is deferred until an actual requirement exists. Malformed explicit values must fail rather than silently falling back.
+
+### Deferred systems
+
+Tokio, Reqwest, Scraper, Tantivy, Axum, PostgreSQL, Aho-Corasick, Candle and ONNX Runtime remain future dependencies. Their mention elsewhere in this document describes future architecture only.
