@@ -35,8 +35,14 @@ jobs:
       - name: Check formatting
         run: cargo fmt --all -- --check
 
+      - name: Validate workspace metadata
+        run: cargo metadata --no-deps --format-version 1
+
       - name: Check workspace
         run: cargo check --workspace --all-targets --locked
+
+      - name: Build workspace
+        run: cargo build --workspace --locked
 
       - name: Run Clippy
         run: cargo clippy --workspace --all-targets --locked -- -D warnings
