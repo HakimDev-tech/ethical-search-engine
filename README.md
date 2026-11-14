@@ -45,9 +45,10 @@ cargo build --workspace --locked
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --all-targets --locked
 cargo doc --workspace --no-deps --locked
+cargo deny check
 ```
 
-The application log level is configured through `ESE_LOG_LEVEL`. Supported values are `error`, `warn`, `info`, `debug` and `trace`; the default is `info`.
+The dependency audit uses `cargo-deny` and the committed `deny.toml`; install `cargo-deny` locally to run the final command. CI runs the audit automatically. The dependency allowlist is separate from the repository license decision.\n\nThe application log level is configured through `ESE_LOG_LEVEL`. Supported values are `error`, `warn`, `info`, `debug` and `trace`; the default is `info`.
 
 ## License
 
