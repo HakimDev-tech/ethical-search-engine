@@ -137,10 +137,9 @@ mod tests {
 
     #[test]
     fn explicit_log_level_is_parsed_case_insensitively() {
-        let config = AppConfig::from_lookup(|key| {
-            Ok((key == "ESE_LOG_LEVEL").then(|| "DeBuG".to_owned()))
-        })
-        .expect("valid configuration");
+        let config =
+            AppConfig::from_lookup(|key| Ok((key == "ESE_LOG_LEVEL").then(|| "DeBuG".to_owned())))
+                .expect("valid configuration");
 
         assert_eq!(config.log_level(), LogLevel::Debug);
     }
@@ -156,9 +155,8 @@ mod tests {
 
     #[test]
     fn lookup_errors_are_propagated() {
-        let result = AppConfig::from_lookup(|key| {
-            Err(ConfigError::NonUnicodeValue(key.to_owned()))
-        });
+        let result =
+            AppConfig::from_lookup(|key| Err(ConfigError::NonUnicodeValue(key.to_owned())));
 
         assert_eq!(
             result.unwrap_err(),
