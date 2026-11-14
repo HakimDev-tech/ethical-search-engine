@@ -156,3 +156,12 @@ This sequence is a planning baseline and may be revised through documented decis
 V0.1 succeeds only when all mandatory acceptance criteria in `ACCEPTANCE_CRITERIA.md` pass, the implementation matches the architecture, and the repository can be built and tested reproducibly.
 
 Compilation alone is not sufficient.
+
+
+## 8.1 V0.2 — Secure crawler foundation
+
+V0.2 is the first bounded network-acquisition release. It accepts explicit HTTP/HTTPS seed URLs and retrieves bounded HTML only after URL validation, destination-address validation, DNS pinning, robots evaluation and host politeness checks.
+
+V0.2 does not discover links, crawl recursively, extract HTML, normalize documents, deduplicate, classify ethical content, index or expose a public search API. Fetched bytes are untrusted acquisition output, not approved or searchable documents.
+
+The crawler must deny private/reserved destinations, prevent uncontrolled redirects, enforce bounded streaming and timeouts, and avoid logging URL query strings or response bodies. The normative security and acceptance contract is defined in the V0.2 crawler documents.

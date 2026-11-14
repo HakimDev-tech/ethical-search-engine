@@ -277,3 +277,59 @@ V0.1 uses environment variables with the `ESE_` prefix and documented defaults. 
 ### Deferred systems
 
 Tokio, Reqwest, Scraper, Tantivy, Axum, PostgreSQL, Aho-Corasick, Candle and ONNX Runtime remain future dependencies. Their mention elsewhere in this document describes future architecture only.
+
+
+---
+
+## V0.2 crawler implementation profile — proposed (version 2.0)
+
+V0.2 adds one library crate, `ese-crawler`, at `crates/crawler`. It is an infrastructure component in the modular monolith, not a service or binary.
+
+### Responsibilities
+
+- URL parsing, canonicalization and policy enforcement.
+- Injectable DNS resolution, special-purpose IP filtering and pinned HTTP connections.
+- Secure bounded HTTP GET with TLS validation, no redirects, no cookies, no ambient proxy and no compression.
+- RFC 9309 robots policy retrieval, evaluation and bounded in-memory cache.
+- Global and per-origin politeness controls.
+- Typed acquisition outcomes and privacy-preserving diagnostics.
+
+### Module layout
+
+```text
+crates/crawler/src/
+├── lib.rs
+├── config.rs
+├── error.rs
+├── url_policy.rs
+├── address_policy.rs
+├── dns.rs
+├── transport.rs
+├── robots/
+│   ├── mod.rs
+│   ├── parser.rs
+│   └── cache.rs
+├── politeness.rs
+└── engine.rs
+```
+
+These are modules in one crate, not independent packages. No new module is created as an empty placeholder.
+
+### Dependency policy
+
+The expected direct dependencies are Tokio, Reqwest (Rustls and streaming only), `url`, `ipnet` or an approved equivalent, and `tracing`. A robots parser must be selected only after an explicit RFC 9309, maintenance, license, MSRV and security review. Exact versions and feature flags are recorded before implementation.
+
+V0.2 does not add Scraper, Tantivy, a database, a browser, AI runtimes or a public API.
+
+### Acquisition invariants
+
+- Only explicit HTTP/HTTPS seed URLs on ports 80/443 are accepted.
+- DNS answers are filtered against an IANA-derived IPv4/IPv6 special-purpose address policy and pinned to the HTTP connector for each fetch.
+- Automatic redirects and ambient proxies are disabled.
+- robots policy is evaluated before page content; inability to retrieve or parse robots denies the page request except for 404/410.
+- Page responses are HTML-only, identity-encoded and streamed under a 5 MiB cap; robots is capped at 512 KiB.
+- Global concurrency defaults to 8; per-origin concurrency is 1; minimum origin spacing is 1 second.
+- Cache and origin state are in-memory and bounded to 10,000 origins.
+- No link discovery, recursive crawling, extraction, persistence, deduplication or indexing is implemented.
+
+The normative behavior and release gates are in `V0.2_CRAWLER_SPEC.md`, `V0.2_CRAWLER_ARCHITECTURE.md`, `V0.2_CRAWLER_DECISIONS.md` and `V0.2_CRAWLER_ACCEPTANCE.md`.
