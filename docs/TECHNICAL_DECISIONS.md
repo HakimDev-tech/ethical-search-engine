@@ -1,7 +1,7 @@
 # Technical Decisions — Ethical Search Engine
 
 - Document ID: ESE-ADR-001
-- Document version: 1.0
+- Document version: 1.1
 - Target release: V0.1
 - Status: Initial decision baseline
 
@@ -208,3 +208,71 @@ To change an accepted decision:
 4. Update this document and the architecture.
 5. Add tests that protect the new boundary.
 6. Record the change in Git history.
+
+
+---
+
+## ADR-017 — V0.1 toolchain and edition
+
+**Decision:** Pin Rust 1.100.0 stable, use Rust edition 2024 and declare MSRV 1.85.0.
+
+**Context:** Reproducible builds require a fixed compiler baseline. Edition 2024 requires Rust 1.85 or later.
+
+**Rationale:** A pinned toolchain avoids silently changing compiler behavior between local development and CI. The declared MSRV provides a compatibility floor for the workspace.
+
+**Consequences:** `rust-toolchain.toml` pins 1.100.0 and requests rustfmt and Clippy. CI uses the same version. Dependency updates must be checked against the declared MSRV; the MSRV may be raised only through a documented decision.
+
+## ADR-018 — Minimal V0.1 crate topology
+
+**Decision:** V0.1 contains exactly three library crates: `ese-domain`, `ese-config` and `ese-observability`.
+
+**Context:** The earlier logical architecture listed more future subsystems than V0.1 needs to compile.
+
+**Rationale:** Three small crates establish real boundaries without empty placeholders or speculative abstractions.
+
+**Consequences:**
+- `ese-domain` and `ese-config` use the standard library only.
+- `ese-observability` uses `tracing` and `tracing-subscriber` with minimal features.
+- No binary application is required in V0.1.
+- No generic shared errors crate is created; errors remain owned by the crate that produces them.
+- Future crawler, index, ranking, API and storage crates are created only when their release implements real behavior.
+
+## ADR-019 — Configuration source for V0.1
+
+**Decision:** Use typed configuration loaded from documented `ESE_`-prefixed environment variables with explicit defaults. Defer configuration files.
+
+**Context:** V0.1 has no operational need for a file format or configuration-file dependency.
+
+**Rationale:** Standard-library environment parsing keeps the foundation small and avoids adding a parser before a concrete requirement exists.
+
+**Consequences:** Explicit malformed values fail validation. Tests must isolate environment access and avoid nondeterministic concurrent mutation of process-global environment variables.
+
+## ADR-020 — Error ownership
+
+**Decision:** Do not create a generic workspace-wide errors crate.
+
+**Context:** A generic error crate would either become a catch-all or force unrelated modules to depend on abstractions without shared semantics.
+
+**Rationale:** Each crate owns its validation and operational errors. A future application boundary may aggregate errors for reporting.
+
+**Consequences:** Error types stay close to the operation and invariant they represent. Cross-crate error conversion is introduced only when a real application use case requires it.
+
+## ADR-021 — Unsafe Rust policy
+
+**Decision:** Forbid unsafe Rust in all V0.1 workspace crates using the workspace lint policy.
+
+**Context:** No V0.1 requirement needs unsafe code.
+
+**Rationale:** This creates a clear and enforceable safety baseline.
+
+**Consequences:** Any future need for unsafe code requires a separate documented decision, a safety justification and focused review. The baseline must not be weakened merely to silence a compiler error.
+
+## ADR-022 — License remains unresolved
+
+**Decision:** Do not add a LICENSE file until the owner explicitly selects a license.
+
+**Context:** A public GitHub repository is not automatically open source, and the license affects reuse and distribution rights.
+
+**Rationale:** Selecting a license without the owner's intent would be an unjustified legal and product decision.
+
+**Consequences:** The README must state that no license has been selected and that no reuse permission is implied.
