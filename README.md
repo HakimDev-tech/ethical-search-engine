@@ -8,7 +8,7 @@ An independent, privacy-conscious, multilingual web search engine focused on rel
 
 ## Project status
 
-The repository currently contains the V0.1 reference specifications. Implementation has not started.
+The repository contains the V0.1 reference specifications and the concrete implementation plan. Rust implementation has not started.
 
 The project is intentionally being developed through explicit specifications, architecture reviews, implementation, automated verification and release gates. A feature is not considered complete merely because it compiles.
 
@@ -18,6 +18,7 @@ The project is intentionally being developed through explicit specifications, ar
 - [System architecture](docs/ARCHITECTURE.md)
 - [Technical decisions](docs/TECHNICAL_DECISIONS.md)
 - [V0.1 acceptance criteria](docs/ACCEPTANCE_CRITERIA.md)
+- [V0.1 implementation plan](docs/IMPLEMENTATION_PLAN.md)
 
 ## V0.1 scope
 
