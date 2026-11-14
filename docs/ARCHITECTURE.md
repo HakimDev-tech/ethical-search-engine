@@ -52,7 +52,6 @@ ethical-search-engine/
 ├── rust-toolchain.toml
 ├── .gitignore
 ├── README.md
-├── LICENSE
 ├── docs/
 │   ├── PRODUCT_SPEC.md
 │   ├── ARCHITECTURE.md
@@ -63,7 +62,6 @@ ethical-search-engine/
 ├── crates/
 │   ├── domain/
 │   ├── config/
-│   ├── errors/
 │   └── observability/
 ├── tests/
 │   ├── integration/
@@ -93,8 +91,8 @@ Must not depend on:
 ### 4.2 Configuration
 Owns configuration loading, precedence, parsing and validation. It may depend on serialization or environment libraries where justified, but must not leak secrets through errors or logs.
 
-### 4.3 Errors
-Defines shared error conventions and safe diagnostic boundaries. Subsystems may retain typed internal errors and convert them at application boundaries.
+### 4.3 Error ownership
+Each crate owns typed errors for its own invariants and operations. V0.1 deliberately has no generic shared errors crate; a future application boundary may translate crate-specific errors into a stable external error model.
 
 ### 4.4 Observability
 Owns tracing initialization and consistent structured event conventions. It must not introduce raw query logging or secret logging by default.
